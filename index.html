@@ -9,8 +9,8 @@
 <title>Prayer Times</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#09090f;color:#e8dfc8;font-family:Georgia,serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background-image:repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(201,168,76,.012) 50px,rgba(201,168,76,.012) 51px),repeating-linear-gradient(-45deg,transparent,transparent 50px,rgba(201,168,76,.012) 50px,rgba(201,168,76,.012) 51px)}
-.card{width:100%;max-width:420px;background:#0d0e17;border:1px solid rgba(201,168,76,.2);border-radius:14px;overflow:hidden;box-shadow:0 8px 60px rgba(0,0,0,.8),0 0 100px rgba(201,168,76,.05)}
+body{background:#09090f;color:#e8dfc8;font-family:Georgia,serif;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(201,168,76,.012) 50px,rgba(201,168,76,.012) 51px),repeating-linear-gradient(-45deg,transparent,transparent 50px,rgba(201,168,76,.012) 50px,rgba(201,168,76,.012) 51px)}
+.card{width:100%;max-width:420px;background:#0d0e17;border:1px solid rgba(201,168,76,.2);border-radius:0;overflow:hidden;box-shadow:0 8px 60px rgba(0,0,0,.8)}
 .topline{height:2px;background:linear-gradient(90deg,transparent,#6b5220 25%,#e8c97a 50%,#6b5220 75%,transparent)}
 .header{padding:20px 22px 14px;text-align:center;background:linear-gradient(180deg,rgba(201,168,76,.07),transparent);border-bottom:1px solid rgba(201,168,76,.08)}
 .title{font-size:11px;letter-spacing:5px;color:#c9a84c;text-transform:uppercase;margin-bottom:4px}
@@ -48,10 +48,6 @@ body{background:#09090f;color:#e8dfc8;font-family:Georgia,serif;min-height:100vh
 <body>
 <div class="card">
   <div class="topline"></div>
-  <div class="header">
-    <div class="title">Prayer Times</div>
-    <div class="loc" id="loc">Detecting location...</div>
-  </div>
   <div id="body">
     <div class="loading">
       <div class="spinner"></div>
@@ -195,7 +191,6 @@ function updateHighlight(){
 function renderTimes(city){
   var today=new Date();
   TIMES=calcTimes(today);
-  document.getElementById('loc').textContent=city;
 
   var pRows='';
   for(var i=0;i<PRAYERS.length;i++){
@@ -229,6 +224,7 @@ function renderTimes(city){
     '<div class="datebar"><div>'
       +'<div class="hijri">'+getHijri(today)+'</div>'
       +'<div class="greg">'+DAYS[today.getDay()]+', '+today.getDate()+' '+MONTHS[today.getMonth()]+' '+today.getFullYear()+'</div>'
+      +'<div class="greg" style="margin-top:2px;color:#8a7a5a">'+city+'</div>'
     +'</div><div class="badge">Hanafi · Umm Al-Qura</div></div>'
     +'<div class="section">Daily Prayers</div>'
     +pRows
@@ -257,7 +253,6 @@ function renderTimes(city){
 }
 
 if(!navigator.geolocation){
-  document.getElementById('loc').textContent='Location unavailable';
   document.getElementById('body').innerHTML='<div class="warn">Your browser does not support geolocation.</div>';
 }else{
   navigator.geolocation.getCurrentPosition(function(pos){
@@ -273,7 +268,6 @@ if(!navigator.geolocation){
         renderTimes(c+(co?', '+co:''));
       }).catch(function(){renderTimes('Your Location');});
   },function(){
-    document.getElementById('loc').textContent='Location denied';
     document.getElementById('body').innerHTML='<div class="warn">Please allow location access and reload the page.</div>';
   },{timeout:10000});
 }
